@@ -55,7 +55,7 @@ find "$1" -type f | grep "\(md5\|txt\)$" | while read I; do F=$(echo $I | rev | 
 echo . | tee -a output
 echo checking dates within tiff date range
 echo . | tee -a output
-find "$1" | grep xml$ | while read I; do START=$(cat "$I" | grep dateAvailableStart | egrep -o '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -dT -f1); TIFFSTART=$(cat "$I" | grep formatLocation | egrep -o "[0-9]{4}\.[0-9]{2}\.[0-9]{2}-[0-9]{4}\.[0-9]{2}\.[0-9]{2}" | cut -d- -f1 | tr . - ); TIFFEND=$(cat "$I" | grep formatLocation | egrep -o "[0-9]{4}\.[0-9]{2}\.[0-9]{2}-[0-9]{4}\.[0-9]{2}\.[0-9]{2}" | cut -d- -f2 | tr . - ); if [ "$START" \< "$TIFFSTART" ] || [ "$START" \> "$TIFFEND" ] ; then echo "PBCore date in '$I' ($START) outside TIFF daterange ($TIFFSTART - $TIFFEND)" | tee -a output; fi; done
+find "$1" | grep xml$ | while read I; do START=$(cat "$I" | grep dateAvailableStart | egrep -o '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -dT -f1); TIFFSTART=$(cat "$I" | grep formatLocation | egrep -o "[0-9]{4}\.[0-9]{2}\.[0-9]{2}-[0-9]{4}\.[0-9]{2}\.[0-9]{2}" | cut -d- -f1 | tr . - ); TIFFEND=$(cat "$I" | grep formatLocation | egrep -o "[0-9]{4}\.[0-9]{2}\.[0-9]{2}-[0-9]{4}\.[0-9]{2}\.[0-9]{2}" | cut -d- -f2 | tr . - ); TIFFEND=$(date -d "$TIFFEND +1 day" +"%Y-%m-%d"); if [ "$START" \< "$TIFFSTART" ] || [ "$START" \> "$TIFFEND" ] ; then echo "PBCore date in \'$I\' ($START) outside TIFF daterange ($TIFFSTART - $TIFFEND)" | tee -a output; fi; done
 echo . | tee -a output
 echo checking tiff files exist
 echo . | tee -a output
