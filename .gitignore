@@ -1,0 +1,8 @@
+log
+*.pbcore
+*.batch
+jhove2.output
+altos
+publishers
+var/lock/[^.]*
+
