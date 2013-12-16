@@ -6,7 +6,7 @@ DEBUG=0
 TIF=""
 CHECKSUM=../../MIX/$(basename $(dirname $D))/$(basename $D)/CHECKSUM
 MIXXML=../../MIX/$(basename $(dirname $D))/$(basename $D)/MIXXML
-TIFFTAGS=1
+TIFFTAGS=10
 
 date | tee log
 
@@ -43,8 +43,8 @@ CMIX=$(xmllint --noout --schema mix20.xsd "$D/$MIXXML/"$B-MIX.xml 2>&1 | grep va
 if [ $DEBUG -eq 1 ]; then echo TIF file format check; fi
 FORMAT=$(file $I | grep 'TIFF image data' | wc -l); if [ ! $FORMAT -eq 1 ]; then echo Error in TIF format: $(file $I); fi
 jhove2/jhove2.sh "$I" > jhove2.output 2> /dev/null
-VALID=$(grep "^   isValid: true" jhove2.output | wc -l); if [ ! $VALID -eq 1 ]; then echo "Error in TIF format - not valid: $(grep "^   isValid:")"; fi
-VERSION=$(grep "^   TiffVersion: 6" jhove2.output | wc -l); if [ ! $VERSION -eq 1 ]; then echo "Error in TIF format - wrong version (should be 6): $(grep "^   TiffVersion:")"; fi
+VALID=$(grep "^   isValid: true" jhove2.output | wc -l); if [ ! $VALID -eq 1 ]; then echo "Error in TIF format - not valid: $(grep "^   isValid:" jhove2.output)"; fi
+VERSION=$(grep "^   TiffVersion: 6" jhove2.output | wc -l); if [ ! $VERSION -eq 1 ]; then echo "Error in TIF format - wrong version (should be 6): $(grep "^   TiffVersion:" jhove2.output)"; fi
 
 if [ $DEBUG -eq 1 ]; then echo TIF tags check; fi
 TAGS=$(tiffinfo $I 2>&1 | wc -l); if [ ! $TAGS -eq $TIFFTAGS ]; then echo Error in TIF tags: number: $TAGS \(expected $TIFFTAGS\); fi
