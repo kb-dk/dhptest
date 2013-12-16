@@ -1,15 +1,16 @@
 #!/bin/bash
-echo $1 > output
-echo Error report >> output
-./showerrors.sh >> output
-echo "####" >> output
-echo "####" >> output
-echo XML error report >> output
-./check_failed_xml.sh "$1" >> output
+OUTPUT="${2:-log}"-output
+echo $1 > "${OUTPUT}"
+echo Error report >> "${OUTPUT}"
+./showerrors.sh "${2:-log}" >> "${OUTPUT}"
+echo "####" >> "${OUTPUT}"
+echo "####" >> "${OUTPUT}"
+echo XML error report >> "${OUTPUT}"
+./check_failed_xml.sh "$1" "${2:-log}" >> "${OUTPUT}"
 T=$1
-echo "####" >> output
-echo "####" >> output
-cat log >> output
-cp output output.txt
-echo "see attachment" | mail -s"$T" -a output.txt dla@statsbiblioteket.dk,kfc@statsbiblioteket.dk,mfo@statsbiblioteket.dk
+echo "####" >> "${OUTPUT}"
+echo "####" >> "${OUTPUT}"
+cat "${2:-log}" >> "${OUTPUT}"
+cp "${OUTPUT}" "${OUTPUT}".txt
+echo "see attachment" | mail -s"$T" -a "${OUTPUT}".txt dla@statsbiblioteket.dk,kfc@statsbiblioteket.dk,mfo@statsbiblioteket.dk
 

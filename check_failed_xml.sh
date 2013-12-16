@@ -1,5 +1,5 @@
 #!/bin/bash
-LOG=log
+LOG="${2:-log}"
 TIF=TIF
 ALTO=ALTO
 MODSXML=MODS
