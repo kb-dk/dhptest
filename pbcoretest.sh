@@ -25,11 +25,15 @@ find "${D}" | grep "xml$" | while read I; do rm -f datotjek; touch datotjek; cat
 echo .
 echo checking end dates after start dates
 echo .
-find "${D}" | grep "xml$" | while read I; do START=$(cat "$I" | grep dateAvailableStart | egrep '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -d'>' -f2 | cut -d'<' -f1); END=$(cat "$I" | grep dateAvailableEnd | egrep '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -d'>' -f2 | cut -d'<' -f1); if [ ! -z "$START" ]; then if [ ! -z "$END" ]; then START1=$(date -d "$START" "+%s" 2>/dev/null); END1=$(date -d "$END" "+%s" 2>/dev/null); if [ ! -z "$START1" ]; then if [ ! -z "$END1" ]; then if [ ! "$END1" -ge "$START1" ]; then echo End before Start ERROR: "$START" "$END" "$I"; fi; else echo End invalid: "$END" "$END1" "$I"; fi; else echo Start invalid: "$START" "$START1" "$I"; fi; fi; fi; done
+find "${D}" | grep "xml$" | while read I; do START=$(cat "$I" | grep dateAvailableStart | egrep '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -d'>' -f2 | cut -d'<' -f1); END=$(cat "$I" | grep dateAvailableEnd | egrep '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -d'>' -f2 | cut -d'<' -f1); if [ ! -z "$START" ]; then if [ ! -z "$END" ]; then START1=$(date -d "$START" "+%s" 2>/dev/null); END1=$(date -d "$END" "+%s" 2>/dev/null); if [ ! -z "$START1" ]; then if [ ! -z "$END1" ]; then if [ ! "$END1" -gt "$START1" ]; then echo End before or equal to Start ERROR: "$START" "$END" "$I"; fi; else echo End invalid: "$END" "$END1" "$I"; fi; else echo Start invalid: "$START" "$START1" "$I"; fi; fi; fi; done
 echo .
 echo checking for multiple publishers in one XML field
 echo .
 find "${D}" | grep "xml$" | while read I; do rm -f publishers; touch publishers; cat "$I" | egrep "<publisher>" | egrep -i '(og | og|eller | eller)[^<]' | grep -v -i kalundbog > publishers; T=$(cat publishers | wc -l); if [ "$T" -ge 1 ]; then echo "$I"; cat publishers; fi; done
+echo .
+echo checking for incorrect publisher
+echo .
+find "${D}" | grep "xml$" | while read I; do rm -f publishers; touch publishers; cat "$I" | egrep "<publisher>" | egrep -i 'DR Prøvesendinger' > publishers; T=$(cat publishers | wc -l); if [ "$T" -ge 1 ]; then echo "$I"; cat publishers; fi; done
 echo .
 echo checking identifiers
 echo .
@@ -62,6 +66,10 @@ echo .
 echo checking tiff files exist
 echo .
 find "${D}" | grep "xml$" | while read I; do TIFFFILE=$(cat "$I" | grep "<formatLocation>" | cut -d ">" -f2 | cut -d "<" -f1); TIFFSUBDIR=$(echo "$TIFFFILE" | cut -d_ -f1 ); if [ ! -f "$TIFFDIR"/"$TIFFSUBDIR"/"$TIFFFILE" ] ; then echo TIFF file "$TIFFDIR"/"$TIFFSUBDIR"/"$TIFFFILE" referred in "$I" not found; fi; done
+echo .
+echo checking suspect utf-8 characters
+echo .
+find "${D}" | grep "xml$" | while read I; do cat "$I" | egrep 'Ã¦|Ã¸|Ã¥|Ã|Ã|Ã'; done
 echo .
 ) | tee "${OUTPUT}"
 
