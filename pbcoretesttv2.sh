@@ -69,7 +69,7 @@ find "${D}" | grep "xml$" | while read I; do TIFFFILE=$(cat "$I" | grep "<format
 echo .
 echo checking suspect utf-8 characters
 echo .
-find "${D}" | grep "xml$" | while read I; do cat "$I" | egrep 'Ã¦|Ã¸|Ã¥|Ã|Ã|Ã'; done
+find "${D}" | grep "xml$" | while read I; do egrep -H 'Ã¦|Ã¸|Ã¥|Ã|Ã|Ã|�' "$I"; done
 echo .
 ) | tee "${OUTPUT}"
 
