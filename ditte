@@ -12,5 +12,5 @@ echo "####" >> "${OUTPUT}"
 echo "####" >> "${OUTPUT}"
 cat "${2:-log}" >> "${OUTPUT}"
 cp "${OUTPUT}" "${OUTPUT}".txt
-echo "see attachment" | mail -s"$T" -a "${OUTPUT}".txt dla@statsbiblioteket.dk,kfc@statsbiblioteket.dk,mfo@statsbiblioteket.dk
+echo "see attachment" | mail -s"$T" -a "${OUTPUT}".txt dla@statsbiblioteket.dk,kfc@statsbiblioteket.dk
 

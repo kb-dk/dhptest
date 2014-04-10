@@ -1,4 +1,4 @@
 #!/bin/bash
 T="$(cat "${1:-output}" | head -1)"
 cp "${1:-output}" "${1:-output}".txt
-echo "see attachment" | mail -s"$T" -a "${1:-output}".txt mfo@statsbiblioteket.dk,dla@statsbiblioteket.dk,kfc@statsbiblioteket.dk
+echo "see attachment" | mail -s"$T" -a "${1:-output}".txt dla@statsbiblioteket.dk,kfc@statsbiblioteket.dk
