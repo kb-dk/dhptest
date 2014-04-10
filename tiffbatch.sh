@@ -4,8 +4,8 @@ ANTAL=0
 DEBUG=0
 
 TIF=""
-CHECKSUM=../../MIX/$(basename $(dirname $D))/$(basename $D)/CHECKSUM
-MIXXML=../../MIX/$(basename $(dirname $D))/$(basename $D)/MIXXML
+CHECKSUM=../../FEJLRETTELSE\ 17-03-2014/$(basename $D)/CHECKSUM
+MIXXML=../../FEJLRETTELSE\ 17-03-2014/$(basename $D)/MIXXML
 TIFFTAGS=10
 
 date | tee log
@@ -20,10 +20,10 @@ FEJL=0
 
 if [ $DEBUG -eq 1 ]; then echo MIX check; fi
 if [ ! -f "$D/$MIXXML/"$B-MIX.xml ]; then echo Error: Missing MIX: $F; FEJL=$(echo $FEJL+1|bc); fi
-if [ ! -f $D/$CHECKSUM/$B-MIX.xml-MD5.txt ]; then echo Error: Missing checksum for MIX: $F; FEJL=$(echo $FEJL+1|bc); fi
-MD=$(md5sum $D/$MIXXML/$B-MIX.xml | awk '{print $1}')
+if [ ! -f "$D/$CHECKSUM/"$B-MIX.xml-MD5.txt ]; then echo Error: Missing checksum for MIX: $F; FEJL=$(echo $FEJL+1|bc); fi
+MD=$(md5sum "$D/$MIXXML/"$B-MIX.xml | awk '{print $1}')
 if [ -z $MD ]; then MD="FOOBAR"; fi
-MDTEST2=$(egrep -i $MD $D/$CHECKSUM/$B-MIX.xml-MD5.txt | wc -l);  if [ ! $MDTEST2 -eq 1 ]; then echo Error in MD5 for MIX i MD5 file: $F; fi
+MDTEST2=$(egrep -i $MD "$D/$CHECKSUM/"$B-MIX.xml-MD5.txt | wc -l);  if [ ! $MDTEST2 -eq 1 ]; then echo Error in MD5 for MIX i MD5 file: $F; fi
 
 if [ ! $FEJL -eq 0 ]; then echo Number of errors: $FEJL; fi
 
